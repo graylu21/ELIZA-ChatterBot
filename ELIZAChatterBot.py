@@ -220,7 +220,7 @@ psychobabble = [
       "Perhaps the answer lies within yourself?",
       "Why don't you tell me?"]],
  
-    [r'quit',
+    [r'quit', ##In ELIZA, if you typed 'quit' these would print and the script would end.
      ["Thank you for talking with me.",
       "Good-bye.",
       "Thank you, that will be $150.  Have a good day!"]],
