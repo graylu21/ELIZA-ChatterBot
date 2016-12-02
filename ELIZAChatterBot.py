@@ -1,4 +1,5 @@
 """ This is an ELIZA & ChatterBot chat bot, in a tkinter GUI chat box. Works! ^_^ """
+""" Update 12/2/16: Can now initiate conversation, and has bound Enter button! """
 
 import tkinter as tk
 try:
@@ -92,8 +93,8 @@ psychobabble = [
       "What feelings do you have when you apologize?"]],
  
     [r'Hello(.*)',
-     ["Hello... I'm glad you could drop by today.",
-      "Hi there... how are you today?",
+     ["Hello, I'm glad you could drop by today.",
+      "Hi there, how are you today?",
       "Hello, how are you feeling today?"]],
  
     [r'I think (.*)',
@@ -220,7 +221,7 @@ psychobabble = [
       "Perhaps the answer lies within yourself?",
       "Why don't you tell me?"]],
  
-    [r'quit', ##In ELIZA, if you typed 'quit' these would print and the script would end.
+    [r'quit', #In ELIZA, if you typed 'quit' these would print and the script would end.
      ["Thank you for talking with me.",
       "Good-bye.",
       "Thank you, that will be $150.  Have a good day!"]],
@@ -248,11 +249,26 @@ class TkinterGUIExample(tk.Tk):
         self.chatbot.set_trainer(ChatterBotCorpusTrainer)
         self.chatbot.train("chatterbot.corpus.english")
 
-        self.title("Chatterbot")
+        self.title("ELIZA")
 
         self.initialize()
 
     def initialize(self):
+
+        def reflect(fragment):                      #These have to be here...
+            tokens = fragment.lower().split()
+            for i, token in enumerate(tokens):
+                if token in reflections:
+                    tokens[i] = reflections[token]
+            return ' '.join(tokens)
+
+        def analyze(statement):                     #...to define analyze for the greeting.
+            for pattern, responses in psychobabble:
+                match = re.match(pattern, str(statement))
+                if match:
+                    rspns = random.choice(responses)
+                    return rspns.format(*[reflect(g) for g in match.groups()])    
+                                                    #But I wish they weren't... -.-
         '''
         Set window layout.
         '''
@@ -260,6 +276,8 @@ class TkinterGUIExample(tk.Tk):
 
         self.usr_input = ttk.Entry(self, state='normal')
         self.usr_input.grid(column=0, row=0, sticky='nesw', padx=3, pady=3)
+        self.usr_input.focus() #Sets focus to the input bar at start
+        self.usr_input.bind('<Return>', lambda e: self.get_response()) #Binds the Enter key
         
         self.respond = ttk.Button(self, text='Get Response', command=self.get_response)
         self.respond.grid(column=1, row=0, sticky='nesw', padx=3, pady=3)
@@ -267,8 +285,11 @@ class TkinterGUIExample(tk.Tk):
         self.conversation_lbl = ttk.Label(self, anchor=tk.E, text='Conversation:')
         self.conversation_lbl.grid(column=0, row=1, sticky='nesw', padx=3, pady=3)
 
-        self.conversation = ScrolledText.ScrolledText(self, state='disabled')
+        self.conversation = ScrolledText.ScrolledText(self, wrap='word', state='normal')
         self.conversation.grid(column=0, row=2, columnspan=2, sticky='nesw', padx=3, pady=3)
+        self.conversation.insert(tk.END, "Eliza: " + str(analyze("Hello")) + "\n") #Initiates Conversation
+        self.conversation['state'] = 'disabled'
+
 
 
     def get_response(self):
