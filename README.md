@@ -8,7 +8,7 @@ However, I found that ELIZA didn't do well responding to statements outside of h
 So I combined the two!! Given normal psychobabble, this program will produce an Eliza response, but for statements that dont match (e.g. Clouds are pretty.) the ChatterBot will come up with a best match response.
 I was able to wrap this program inside guntercox's tkinter-gui example, which works really well.
 
-My goal with this project is to tweak some of the customizations and eventually use it a template for other conversational chatbots that know how to respond to everyday social niceities and can generate responses outside of that scope!
+My goal with this project is to tweak some of the customizations and eventually use it a template for other conversational chatbots that know how to respond to everyday social niceties and can generate responses outside of that scope!
 
 
 ELIZA: https://www.smallsurething.com/implementing-the-famous-eliza-chatbot-in-python/
